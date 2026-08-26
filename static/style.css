@@ -1,0 +1,578 @@
+
+/* ==============================
+   RESET
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ==============================
+   BODY
+   ============================== */
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff1f8,
+            #f5efff
+        );
+
+    padding: 40px 20px;
+
+    color: #333;
+}
+
+
+/* ==============================
+   MAIN CONTAINER
+   ============================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 850px;
+
+    margin: auto;
+
+    text-align: center;
+}
+
+
+/* ==============================
+   HEADER
+   ============================== */
+
+.header {
+
+    margin-bottom: 30px;
+}
+
+
+.flower-logo {
+
+    font-size: 65px;
+
+    margin-bottom: 5px;
+}
+
+
+.header h1 {
+
+    font-size: 48px;
+
+    font-weight: 800;
+
+    color: #333;
+
+    margin-bottom: 8px;
+}
+
+
+.header h1 span {
+
+    color: #b84d87;
+}
+
+
+.header p {
+
+    color: #777;
+
+    font-size: 18px;
+}
+
+
+/* ==============================
+   MAIN CARD
+   ============================== */
+
+.card {
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.10);
+}
+
+
+.card h2 {
+
+    font-size: 28px;
+
+    margin-bottom: 10px;
+}
+
+
+.description {
+
+    color: #777;
+
+    margin-bottom: 30px;
+
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   UPLOAD ZONE
+   ============================== */
+
+.upload-zone {
+
+    display: block;
+
+    width: 100%;
+
+    border: 3px dashed #d08ab0;
+
+    border-radius: 20px;
+
+    padding: 45px 20px;
+
+    cursor: pointer;
+
+    background: #fff8fc;
+
+    transition:
+        transform 0.25s,
+        background 0.25s,
+        border-color 0.25s;
+}
+
+
+.upload-zone:hover {
+
+    background: #fff0f7;
+
+    border-color: #ad4f81;
+
+    transform: translateY(-3px);
+}
+
+
+.upload-icon {
+
+    font-size: 55px;
+
+    margin-bottom: 15px;
+}
+
+
+.upload-zone h3 {
+
+    font-size: 21px;
+
+    margin-bottom: 10px;
+}
+
+
+.upload-zone p {
+
+    color: #777;
+
+    margin-bottom: 12px;
+}
+
+
+.upload-zone span {
+
+    display: inline-block;
+
+    font-size: 13px;
+
+    color: #a0507d;
+
+    background: #fbe7f2;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+}
+
+
+/* ==============================
+   FILE INPUT
+   ============================== */
+
+
+/* ⭐ CHANGED:
+   Hide the real file input because
+   the upload zone opens it instead. */
+
+#fileInput {
+
+    display: none;
+}
+
+
+/* ==============================
+   IMAGE PREVIEW
+   ============================== */
+
+.preview-container {
+
+    display: none;
+
+    margin-top: 25px;
+}
+
+
+.preview-container img {
+
+    width: 300px;
+
+    height: 300px;
+
+    max-width: 100%;
+
+    object-fit: cover;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.15);
+}
+
+
+#fileName {
+
+    margin-top: 10px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* ==============================
+   BUTTON
+   ============================== */
+
+button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    background: #b84d87;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s,
+        transform 0.25s;
+}
+
+
+button:hover:not(:disabled) {
+
+    background: #963c6e;
+
+    transform: translateY(-2px);
+}
+
+
+button:disabled {
+
+    background: #c8c8c8;
+
+    cursor: not-allowed;
+}
+
+
+/* ==============================
+   LOADING
+   ============================== */
+
+.loading {
+
+    display: none;
+
+    margin-top: 25px;
+
+    color: #777;
+}
+
+
+.spinner {
+
+    width: 35px;
+
+    height: 35px;
+
+    border: 4px solid #eee;
+
+    border-top: 4px solid #b84d87;
+
+    border-radius: 50%;
+
+    margin: auto auto 12px;
+
+    animation:
+        spin 1s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+}
+
+
+/* ==============================
+   RESULT
+   ============================== */
+
+.result {
+
+    display: none;
+
+    margin-top: 30px;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff5fb,
+            #f7f1ff
+        );
+}
+
+
+.result-title {
+
+    color: #888;
+
+    font-size: 15px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 8px;
+}
+
+
+#flowerName {
+
+    font-size: 36px;
+
+    color: #9c4073;
+
+    margin-bottom: 20px;
+}
+
+
+.confidence-box {
+
+    display: inline-block;
+
+    background: white;
+
+    padding: 12px 25px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.confidence-box p {
+
+    color: #888;
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+
+#confidence {
+
+    font-size: 22px;
+
+    color: #444;
+}
+
+
+/* ==============================
+   ERROR
+   ============================== */
+
+.error {
+
+    display: none;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #ffe8e8;
+
+    color: #a00000;
+
+    font-size: 14px;
+}
+
+
+/* ==============================
+   SUPPORTED FLOWERS
+   ============================== */
+
+.supported {
+
+    margin-top: 35px;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.07);
+}
+
+
+.supported h2 {
+
+    margin-bottom: 20px;
+
+    font-size: 23px;
+}
+
+
+.flower-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.flower-list span {
+
+    background: #f7edf4;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    color: #75425f;
+}
+
+
+/* ==============================
+   FOOTER
+   ============================== */
+
+footer {
+
+    margin-top: 25px;
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+/* ==============================
+   MOBILE
+   ============================== */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 20px 12px;
+
+    }
+
+
+    .card {
+
+        padding: 25px 18px;
+
+    }
+
+
+    .header h1 {
+
+        font-size: 38px;
+
+    }
+
+
+    .header p {
+
+        font-size: 15px;
+
+    }
+
+
+    .upload-zone {
+
+        padding: 35px 15px;
+
+    }
+
+
+    #flowerName {
+
+        font-size: 28px;
+
+    }
+
+}

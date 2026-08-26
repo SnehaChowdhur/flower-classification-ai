@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BloomAI | Flower Classifier</title>
+
+
+    <!-- ⭐ CHANGED:
+         Added our external CSS file.
+         This controls the website design. -->
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ==============================
+         MAIN CONTAINER
+         ============================== -->
+
+    <main class="container">
+
+
+        <!-- ==============================
+             HEADER
+             ============================== -->
+
+        <section class="header">
+
+            <div class="flower-logo">
+                🌸
+            </div>
+
+            <h1>
+                Bloom<span>AI</span>
+            </h1>
+
+            <p>
+                Identify flowers using artificial intelligence
+            </p>
+
+        </section>
+
+
+        <!-- ==============================
+             UPLOAD CARD
+             ============================== -->
+
+        <section class="card">
+
+            <h2>
+                🌺 Identify Your Flower
+            </h2>
+
+            <p class="description">
+                Upload a clear image of a flower
+                and our AI will identify it for you.
+            </p>
+
+
+            <!-- ⭐ CHANGED:
+                 The upload area is now a LABEL.
+                 
+                 "for=fileInput" connects this area
+                 directly to the hidden file input.
+                 
+                 What actually changed:
+                 Clicking anywhere inside this box
+                 opens the Windows file picker. -->
+
+            <label
+                for="fileInput"
+                class="upload-zone"
+                id="uploadZone"
+            >
+
+                <div class="upload-icon">
+                    📷
+                </div>
+
+                <h3>
+                    Choose a flower image
+                </h3>
+
+                <p>
+                    Click here to browse your computer
+                </p>
+
+                <span>
+                    JPG • JPEG • PNG
+                </span>
+
+            </label>
+
+
+            <!-- ⭐ CHANGED:
+                 Added a proper file input.
+                 
+                 It is hidden visually through CSS,
+                 but the label above activates it. -->
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/jpeg,image/png,.jpg,.jpeg,.png"
+            >
+
+
+            <!-- ==============================
+                 IMAGE PREVIEW
+                 ============================== -->
+
+            <div
+                class="preview-container"
+                id="previewContainer"
+            >
+
+                <img
+                    id="previewImage"
+                    alt="Selected flower image"
+                >
+
+                <p id="fileName">
+                    No image selected
+                </p>
+
+            </div>
+
+
+            <!-- ==============================
+                 PREDICTION BUTTON
+                 ============================== -->
+
+            <button
+                type="button"
+                id="predictButton"
+                disabled
+            >
+
+                🔍 Identify Flower
+
+            </button>
+
+
+            <!-- ==============================
+                 LOADING
+                 ============================== -->
+
+            <div
+                class="loading"
+                id="loading"
+            >
+
+                <div class="spinner"></div>
+
+                <p>
+                    AI is analyzing your flower...
+                </p>
+
+            </div>
+
+
+            <!-- ==============================
+                 RESULT
+                 ============================== -->
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <p class="result-title">
+                    Prediction Result
+                </p>
+
+                <h2 id="flowerName">
+                    -
+                </h2>
+
+                <div class="confidence-box">
+
+                    <p>
+                        Confidence
+                    </p>
+
+                    <strong id="confidence">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+                 ERROR
+                 ============================== -->
+
+            <div
+                class="error"
+                id="error"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             SUPPORTED FLOWERS
+             ============================== -->
+
+        <section class="supported">
+
+            <h2>
+                🌼 Supported Flowers
+            </h2>
+
+            <div class="flower-list">
+
+                <span>Chandramallika</span>
+                <span>Cosmos Phul</span>
+                <span>Gada</span>
+                <span>Golap</span>
+                <span>Jaba</span>
+                <span>Kagoj Phul</span>
+                <span>Noyontara</span>
+                <span>Radhachura</span>
+                <span>Rangan</span>
+                <span>Salvia</span>
+                <span>Sandhyamani</span>
+                <span>Surjomukhi</span>
+                <span>Zinnia</span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             FOOTER
+             ============================== -->
+
+        <footer>
+
+            <p>
+                Powered by TensorFlow • MobileNetV2 • FastAPI
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- ⭐ CHANGED:
+         Added JavaScript file.
+         
+         What actually changed:
+         JavaScript handles image selection,
+         preview, API request and displaying
+         the prediction. -->
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>
