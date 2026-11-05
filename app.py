@@ -3,21 +3,34 @@
 # IMPORTS
 # ==============================
 
-from fastapi import FastAPI, UploadFile, File
+import os
+import socket
+import threading
+import warnings
+import webbrowser
+from pathlib import Path
+
+os.environ.setdefault("CUDA_VISIBLE_DEVICES", "-1")
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+warnings.filterwarnings("ignore")
+
+from fastapi import FastAPI, UploadFile, File, HTTPException
 # FastAPI creates our backend API
 
 from fastapi.staticfiles import StaticFiles
-# ⭐ CHANGED: Added this import.
-# What changed:
 # Allows FastAPI to serve frontend files such as CSS and JavaScript.
 
 from fastapi.responses import FileResponse
-# ⭐ CHANGED: Added this import.
-# What changed:
 # Allows FastAPI to send index.html to the browser.
+
+import uvicorn
 
 import tensorflow as tf
 # Loads the trained TensorFlow model
+
+tf.get_logger().setLevel("ERROR")
+tf.autograph.set_verbosity(0)
 
 import numpy as np
 # Used for arrays and class names
@@ -25,7 +38,7 @@ import numpy as np
 import io
 # Used to read uploaded image bytes
 
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 # Used to open and process uploaded images
 
 
@@ -33,7 +46,42 @@ from PIL import Image
 # CREATE FASTAPI APPLICATION
 # ==============================
 
+BASE_DIR = Path(__file__).resolve().parent
+
 app = FastAPI()
+
+
+def find_free_port(start_port: int, max_checks: int = 20) -> int:
+    for port in range(start_port, start_port + max_checks):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            try:
+                sock.bind(("127.0.0.1", port))
+                return port
+            except OSError:
+                continue
+
+    raise RuntimeError(
+        f"Unable to start the API. No free port found near {start_port}."
+    )
+
+
+def run_server() -> None:
+    host = os.getenv("HOST", "127.0.0.1")
+    start_port = int(os.getenv("PORT", "8000"))
+    port = find_free_port(start_port)
+    threading.Timer(
+        2.0,
+        webbrowser.open,
+        args=(f"http://{host}:{port}",),
+    ).start()
+
+    uvicorn.run(
+        app,
+        host=host,
+        port=port,
+        reload=False,
+        log_level="info",
+    )
 
 
 # ==============================
@@ -42,19 +90,9 @@ app = FastAPI()
 
 app.mount(
     "/static",
-    StaticFiles(directory="static"),
+    StaticFiles(directory=str(BASE_DIR / "static")),
     name="static"
 )
-# ⭐ CHANGED: Added this entire section.
-#
-# What actually changed:
-# FastAPI is now connected to the "static" folder.
-#
-# This allows the browser to access:
-#
-# /static/index.html
-# /static/style.css
-# /static/script.js
 
 
 # ==============================
@@ -62,10 +100,8 @@ app.mount(
 # ==============================
 
 model = tf.keras.models.load_model(
-    "flower_classifier.keras"
+    str(BASE_DIR / "flower_classifier.keras")
 )
-# Existing code:
-# Loads the trained flower classification model
 
 
 # ==============================
@@ -73,11 +109,9 @@ model = tf.keras.models.load_model(
 # ==============================
 
 class_names = np.load(
-    "class_names.npy",
+    str(BASE_DIR / "class_names.npy"),
     allow_pickle=True
 )
-# Existing code:
-# Loads the 13 flower names
 
 
 # ==============================
@@ -88,7 +122,7 @@ class_names = np.load(
 def home():
 
     return FileResponse(
-        "static/index.html"
+        str(BASE_DIR / "static" / "index.html")
     )
 
 # ⭐ CHANGED: Added this endpoint.
@@ -127,14 +161,25 @@ async def predict(
     image_bytes = await file.read()
     # Read the uploaded image
 
+    if not image_bytes:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty. Please choose an image and try again.",
+        )
+
 
     # ==============================
     # OPEN IMAGE
     # ==============================
 
-    image = Image.open(
-        io.BytesIO(image_bytes)
-    )
+    try:
+        image = Image.open(io.BytesIO(image_bytes))
+        image.load()
+    except (UnidentifiedImageError, OSError) as exc:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file could not be read as an image. Please choose a JPG or PNG image.",
+        ) from exc
     # Convert uploaded bytes into an image
 
 
@@ -246,3 +291,7 @@ async def predict(
     #     "flower": "Golap",
     #     "confidence": 95.42
     # }
+
+
+if __name__ == "__main__":
+    run_server()

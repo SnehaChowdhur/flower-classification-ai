@@ -4,7 +4,11 @@ venv/
 __pycache__/
 *.pyc
 DATASET/
-.vscode/
+.vscode/*
+!.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/start_app.ps1
 .idea/
 .ipynb_checkpoints/
 .DS_Store

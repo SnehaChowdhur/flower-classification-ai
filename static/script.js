@@ -209,18 +209,6 @@ predictButton.addEventListener(
             // ==============================
 
 
-            // ⭐ CHANGED:
-            // Use "/predict" instead of
-            // "http://127.0.0.1:8000/predict".
-            //
-            // What actually changed:
-            // The website and API are now served
-            // by the same FastAPI server.
-            //
-            // Therefore "/predict" automatically means:
-            //
-            // http://127.0.0.1:8000/predict
-
             const response =
                 await fetch(
                     "/predict",
@@ -236,18 +224,17 @@ predictButton.addEventListener(
             // CHECK RESPONSE
             // ==============================
 
-            if (!response.ok) {
-
-                throw new Error(
-                    "Prediction failed."
-                );
-
-            }
-
-
             // Convert response into JSON
             const data =
                 await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    typeof data.detail === "string"
+                        ? data.detail
+                        : `Prediction failed (HTTP ${response.status}).`
+                );
+            }
 
 
             // ==============================
@@ -281,9 +268,26 @@ predictButton.addEventListener(
             );
 
 
-            showError(
-                "Unable to connect to the prediction server. Make sure FastAPI is running."
-            );
+            if (error instanceof TypeError) {
+                const endpoint =
+                    new URL("/predict", window.location.href);
+
+                if (window.location.protocol === "file:") {
+                    showError(
+                        "This page was opened as a local file. Start the backend with `.\\.venv\\Scripts\\python.exe main.py`, then open the FastAPI URL printed in the terminal."
+                    );
+                } else {
+                    showError(
+                        `Could not reach ${endpoint.origin}. Start the backend with \`.\\.venv\\Scripts\\python.exe main.py\`, then open the FastAPI URL printed in the terminal.`
+                    );
+                }
+            } else {
+                showError(
+                    error instanceof Error
+                        ? error.message
+                        : "Prediction request failed."
+                );
+            }
 
         }
 
@@ -318,4 +322,3 @@ function showError(message) {
         "block";
 
 }
-
