@@ -3,12 +3,48 @@
 # IMPORTS
 # ==============================
 
+import importlib.util
 import os
 import socket
+import subprocess
+import sys
 import threading
 import warnings
 import webbrowser
 from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
+def ensure_dependencies() -> None:
+    required_modules = ["tensorflow", "fastapi", "uvicorn", "numpy", "PIL"]
+    missing_modules = [
+        module for module in required_modules if importlib.util.find_spec(module) is None
+    ]
+
+    if not missing_modules:
+        return
+
+    requirements_path = BASE_DIR / "requirements.txt"
+    if not requirements_path.exists():
+        raise RuntimeError(
+            "Missing required dependencies: "
+            + ", ".join(missing_modules)
+            + ". Install them with: pip install "
+            + " ".join(missing_modules)
+        )
+
+    print(
+        "Installing missing project dependencies from requirements.txt...",
+        flush=True,
+    )
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "-r", str(requirements_path)],
+        check=True,
+    )
+
+
+ensure_dependencies()
 
 os.environ.setdefault("CUDA_VISIBLE_DEVICES", "-1")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "3")
@@ -45,8 +81,6 @@ from PIL import Image, UnidentifiedImageError
 # ==============================
 # CREATE FASTAPI APPLICATION
 # ==============================
-
-BASE_DIR = Path(__file__).resolve().parent
 
 app = FastAPI()
 
