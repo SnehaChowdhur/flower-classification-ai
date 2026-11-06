@@ -391,6 +391,7 @@ native-indian-flower-classification/
 ├── class_names.npy         # Flower class mapping
 │
 ├── requirements.txt        # Python dependencies
+├── .python-version         # Python version used by Render
 ├── .gitignore              # Files excluded from Git
 └── README.md               # Project documentation
 ```
@@ -431,7 +432,7 @@ native-indian-flower-classification/
 
 Make sure you have installed:
 
-* Python 3.x
+* Python 3.13 (the deployment runtime is pinned in `.python-version`)
 * Git
 
 ---
